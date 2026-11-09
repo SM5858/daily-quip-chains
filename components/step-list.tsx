@@ -259,8 +259,20 @@ function StepCard({
 }) {
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
-  const [saveState, saveAction] = useActionState(updateStep, idleState);
   const [deleteState, deleteAction] = useActionState(deleteStep, idleState);
+
+  // Wrapping the Server Action rather than watching its result in an effect:
+  // this runs on the client, so closing the editor on success is part of the
+  // same transition that saved it — no extra render pass showing a saved form
+  // the admin then has to dismiss.
+  const [saveState, saveAction] = useActionState(
+    async (previous: ActionState, formData: FormData) => {
+      const result = await updateStep(previous, formData);
+      if (result.status === "success") setEditing(false);
+      return result;
+    },
+    idleState
+  );
 
   return (
     <li className="step-rail relative pl-11">
@@ -354,6 +366,9 @@ function StepCard({
                   Delete
                 </button>
               )}
+              {/* The editor closes itself on success, so its confirmation is
+                  shown out here where there is still something to show it on. */}
+              <Message state={saveState} />
               <Message state={deleteState} />
             </div>
           </>
