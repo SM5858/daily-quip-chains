@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   Theme
+   ===========================================================================
+   Three modes, which is one more than a media query can express on its own:
+
+     data-theme="light"   forced light
+     data-theme="dark"    forced dark
+     no attribute         follow the operating system
+
+   So the dark values are written twice. Once inside the media query, guarded
+   by :not([data-theme="light"]) so a forced light theme is not overridden by a
+   dark OS; and once unguarded for an explicit [data-theme="dark"], which has
+   to win on a light OS. `color-scheme` comes along for native form controls,
+   scrollbars and the <input type="file"> button.
+
+   The attribute is set by an inline script in app/layout.tsx before first
+   paint, so a forced theme does not flash the other one.
+   =========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  --background: #f4f7f6;
+  --surface: #ffffff;
+  --surface-2: #e8efed;
+  --foreground: #0e1716;
+  --muted: #566b67;
+  --line: rgba(14, 23, 22, 0.11);
+
+  --accent: #0b6a61;
+  --accent-contrast: #ffffff;
+  --accent-soft: #d7efeb;
+
+  --ok: #15803d;
+  --ok-soft: #e4f7ea;
+  --warn: #8c5e0f;
+  --warn-soft: #fbf2df;
+  --danger: #be123c;
+  --danger-soft: #fdeaef;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --background: #0a100f;
+    --surface: #121a18;
+    --surface-2: #1b2422;
+    --foreground: #e9efed;
+    --muted: #8ea29e;
+    --line: rgba(255, 255, 255, 0.12);
+
+    --accent: #5fd6c4;
+    --accent-contrast: #06100e;
+    --accent-soft: rgba(95, 214, 196, 0.16);
+
+    --ok: #4ade80;
+    --ok-soft: rgba(74, 222, 128, 0.14);
+    --warn: #e3b44a;
+    --warn-soft: rgba(227, 180, 74, 0.14);
+    --danger: #fb7185;
+    --danger-soft: rgba(251, 113, 133, 0.14);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #0a100f;
+  --surface: #121a18;
+  --surface-2: #1b2422;
+  --foreground: #e9efed;
+  --muted: #8ea29e;
+  --line: rgba(255, 255, 255, 0.12);
+
+  --accent: #5fd6c4;
+  --accent-contrast: #06100e;
+  --accent-soft: rgba(95, 214, 196, 0.16);
+
+  --ok: #4ade80;
+  --ok-soft: rgba(74, 222, 128, 0.14);
+  --warn: #e3b44a;
+  --warn-soft: rgba(227, 180, 74, 0.14);
+  --danger: #fb7185;
+  --danger-soft: rgba(251, 113, 133, 0.14);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+}
+
+/* The connector down the left of the step list: a chain you can see. */
+.step-rail::before {
+  content: "";
+  position: absolute;
+  left: 0.9375rem;
+  top: 2rem;
+  bottom: -0.75rem;
+  width: 1px;
+  background: var(--line);
+}
